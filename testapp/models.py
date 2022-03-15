@@ -44,9 +44,16 @@ class Answer(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     question = models.ForeignKey(Question, on_delete=models.PROTECT)
     selected_answer = models.ForeignKey(QuestionChoice, on_delete=models.PROTECT)
+    test = models.ForeignKey(Test, on_delete=models.PROTECT, default=1)
     right_answer = models.BooleanField(verbose_name='Ответ верный')
+
+    def __str__(self):
+        return f'{self.user}|{self.question}'
 
 
 class PassedTest(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     test = models.ForeignKey(Test, on_delete=models.PROTECT)
+
+    def __str__(self):
+        return f'{self.user}|{self.test}'
