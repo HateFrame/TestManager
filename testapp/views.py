@@ -86,7 +86,8 @@ class UserFilter(filters.FilterSet):
 
 
 class UserListView(generics.ListAPIView):
-    permission_classes = [IsAdminUser]
+    # permission_classes = [IsAdminUser]
+    permission_classes = [AllowAny]
     queryset = PassedTest.objects.all()
     serializer_class = PassedTestUserSerializer
     filter_backends = (filters.DjangoFilterBackend,)
