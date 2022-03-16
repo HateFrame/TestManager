@@ -1,6 +1,8 @@
 from rest_framework import generics, status
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 
+from django.contrib.auth.models import User
+from django_filters import rest_framework as filters
 from testapp.models import Test, Question, QuestionChoice, PassedTest, Answer
 from testapp.serializers import (
     TestListSerializer,
@@ -10,7 +12,8 @@ from testapp.serializers import (
     CreateAnswerSerializer,
     PassedTestSerializer,
     TestUserAnswerSerializer,
-    CreatePassedTestSerializer
+    CreatePassedTestSerializer,
+    PassedTestUserSerializer
 )
 
 
@@ -73,3 +76,18 @@ class TestUserAnswersView(generics.ListAPIView):
 class PassedTestsCreate(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = CreatePassedTestSerializer
+
+
+class UserFilter(filters.FilterSet):
+
+    class Meta:
+        model = PassedTest
+        fields = ['user', 'test']
+
+
+class UserListView(generics.ListAPIView):
+    permission_classes = [IsAdminUser]
+    queryset = PassedTest.objects.all()
+    serializer_class = PassedTestUserSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_class = UserFilter

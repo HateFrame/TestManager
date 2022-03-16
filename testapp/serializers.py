@@ -92,3 +92,10 @@ class CreatePassedTestSerializer(serializers.ModelSerializer):
             test=validated_data.get('test')
         )
         return passed_test
+
+
+class PassedTestUserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = PassedTest
+        fields = ['user', 'test']

@@ -7,7 +7,8 @@ from .views import (
     AnswerCreate,
     PassedTestsView,
     TestUserAnswersView,
-    PassedTestsCreate
+    PassedTestsCreate,
+    UserListView
 )
 urlpatterns = [
     path('tests/', TestListView.as_view()),
@@ -18,4 +19,6 @@ urlpatterns = [
     path('tests/passed/', PassedTestsView.as_view()),
     path('tests/passed/add', PassedTestsCreate.as_view()),
     path('tests/<int:test_id>/answers/', TestUserAnswersView.as_view()),
+
+    path('tests/passed/filters/', UserListView.as_view())
 ]
