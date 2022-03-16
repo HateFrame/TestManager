@@ -9,7 +9,8 @@ from testapp.serializers import (
     QuestionChoiceSerializer,
     CreateAnswerSerializer,
     PassedTestSerializer,
-    TestUserAnswerSerializer
+    TestUserAnswerSerializer,
+    CreatePassedTestSerializer
 )
 
 
@@ -67,3 +68,8 @@ class TestUserAnswersView(generics.ListAPIView):
     def get_queryset(self):
         test_id = self.kwargs['test_id']
         return Answer.objects.filter(user=self.request.user, test=test_id)
+
+
+class PassedTestsCreate(generics.CreateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = CreatePassedTestSerializer

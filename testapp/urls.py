@@ -6,7 +6,8 @@ from .views import (
     QuestionChoicesView,
     AnswerCreate,
     PassedTestsView,
-    TestUserAnswersView
+    TestUserAnswersView,
+    PassedTestsCreate
 )
 urlpatterns = [
     path('tests/', TestListView.as_view()),
@@ -15,5 +16,6 @@ urlpatterns = [
     path('tests/question/<int:pk>/choices/', QuestionChoicesView.as_view()),
     path('tests/answer/', AnswerCreate.as_view()),
     path('tests/passed/', PassedTestsView.as_view()),
-    path('tests/<int:test_id>/answers', TestUserAnswersView.as_view())
+    path('tests/passed/add', PassedTestsCreate.as_view()),
+    path('tests/<int:test_id>/answers/', TestUserAnswersView.as_view()),
 ]

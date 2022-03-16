@@ -1,5 +1,8 @@
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
+
 from testapp.models import Test, Answer, Question, QuestionChoice, PassedTest
+
 
 
 class TestListSerializer(serializers.ModelSerializer):
@@ -46,13 +49,15 @@ class CreateAnswerSerializer(serializers.ModelSerializer):
         question_object = QuestionChoice.objects.get(id=validated_data.get('selected_answer').id)
         answer_mark = question_object.right_choice
         question = question_object.question
+        if question.question_type != 'checkbox':
+            if Answer.objects.filter(user=validated_data.get('user'), question=question).exists():
+                raise serializers.ValidationError({"detail": "You can only give one answer to this question"})
         answer, _ = Answer.objects.update_or_create(
             user=validated_data.get('user'),
             question=question,
             selected_answer=validated_data.get('selected_answer'),
-            test=question.test_id,
+            test=question.test,
             right_answer=answer_mark
-
         )
         return answer
 
@@ -73,3 +78,17 @@ class TestUserAnswerSerializer(serializers.ModelSerializer):
         model = Answer
         fields = ['question', 'selected_answer', 'right_answer']
 
+
+class CreatePassedTestSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
+    class Meta:
+        model = PassedTest
+        fields = ['test', 'user']
+
+    def create(self, validated_data):
+        passed_test, _ = PassedTest.objects.update_or_create(
+            user=validated_data.get('user'),
+            test=validated_data.get('test')
+        )
+        return passed_test
