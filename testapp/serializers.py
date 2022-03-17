@@ -43,7 +43,7 @@ class CreateAnswerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Answer
-        fields = ['selected_answer', 'user']
+        fields = ['selected_answer', 'text', 'user']
 
     def create(self, validated_data):
         question_object = QuestionChoice.objects.get(id=validated_data.get('selected_answer').id)
@@ -57,7 +57,8 @@ class CreateAnswerSerializer(serializers.ModelSerializer):
             question=question,
             selected_answer=validated_data.get('selected_answer'),
             test=question.test,
-            right_answer=answer_mark
+            right_answer=answer_mark,
+            text=validated_data.get('text')
         )
         return answer
 

@@ -46,6 +46,7 @@ class Answer(models.Model):
     selected_answer = models.ForeignKey(QuestionChoice, on_delete=models.PROTECT)
     test = models.ForeignKey(Test, on_delete=models.PROTECT, default=1)
     right_answer = models.BooleanField(verbose_name='Ответ верный')
+    text = models.TextField(blank=True, null=True, default='')
 
     def __str__(self):
         return f'{self.user}|{self.question}'
